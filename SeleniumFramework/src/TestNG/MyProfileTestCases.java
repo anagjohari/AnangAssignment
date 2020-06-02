@@ -5,21 +5,21 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import CommonClass.Driver;
-import CommonClass.UserDetails;
 import POM.*;
 public class MyProfileTestCases {
 	
-final WebDriver driver=Driver.GetDriver();
+  WebDriver driver;
   @Test
   public void UpdateMyProfile() {
 	  
 	  try
 	  {
-	  
+	  Driver objDriver=new Driver("chrome");
+	  driver=objDriver.GetDriver();
 	  MyProfilePage myProfile=HomePage.MyProfileLandingPage(driver);
-	  String updatedProfileName=myProfile.VerifyUpdatedProfile(driver); 
+	  String updatedProfileName=myProfile.VerifyUpdatedProfile(driver).trim(); 
 	  System.out.println(updatedProfileName);
-	  Assert.assertEquals(updatedProfileName,"Testing");
+	  Assert.assertEquals(updatedProfileName,"Demo Larson");
 	  }
 	  catch(Exception ex)
 	  {

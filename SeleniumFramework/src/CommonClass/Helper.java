@@ -1,10 +1,15 @@
 package CommonClass;
-
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+
+
 
 public class Helper {
 	
@@ -13,18 +18,22 @@ public class Helper {
 		WebElement element=null;
 		try
 		{
-			if(elementType.toLowerCase().equals("id"))
-			{
-				element=driver.findElement(By.id(locator));
-				
-			}
-			if(elementType.toLowerCase().equals("xpath"))
-			{
-				element=driver.findElement(By.xpath(locator));
-				
-			}
+		   String ElementLocator=elementType.toLowerCase();
+		   WebDriverWait wait=new WebDriverWait(driver, 20);
+		   switch (ElementLocator) {
+		case "id":
+			element= wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(locator)));
+			break;
 			
-			return element;
+		case "xpath":
+			element= wait.until(ExpectedConditions.elementToBeClickable(By.xpath(locator)));
+            break;
+            
+		default:
+			break;
+		}
+		   
+		return element;
 			
 		}
 		catch(Exception ex)
@@ -112,12 +121,44 @@ public class Helper {
 		
 	
 	}
-	public static void Wait(int miliseconds)
+	
+	public static boolean FinishLoading(WebDriver driver) {
+
+	    WebDriverWait wait = new WebDriverWait(driver, 30);
+	    JavascriptExecutor js =(JavascriptExecutor) driver;
+
+	    // wait for jQuery to load
+	    ExpectedCondition<Boolean> jQueryLoad = new ExpectedCondition<Boolean>() {
+	      @Override
+	      public Boolean apply(WebDriver driver) {
+	        try {
+	          return ((Long)js.executeScript("return jQuery.active") == 0);
+	        }
+	        catch (Exception e) {
+	          return true;
+	        }
+	      }
+	    };
+
+	 
+	    ExpectedCondition<Boolean> jsLoad = new ExpectedCondition<Boolean>() {
+	      @Override
+	      public Boolean apply(WebDriver driver) {
+	        return js.executeScript("return document.readyState")
+	            .toString().equals("complete");
+	      }
+	    };
+
+	  return wait.until(jQueryLoad) && wait.until(jsLoad);
+	}
+	
+    public static void MoveToElement(WebDriver driver,String elementIdentity,String locator)
 	{
 		try
 		{
-			Thread.sleep(miliseconds);
-			
+			Actions actions = new Actions(driver);
+			WebElement element=ElementByLocator(driver, elementIdentity, locator);
+			actions.moveToElement(element).perform();	
 		}
 		catch(Exception ex)
 		{
@@ -143,6 +184,110 @@ public class Helper {
 		}
     	
     	
-    }
+    
+}
+
+	public static void RefreshPage(WebDriver driver)
+	{
+		
+		try
+		{
+			driver.navigate().refresh();
+			
+			
+		}
+		catch(Exception ex)
+		{
+			
+			throw ex;
+		}
+		
+		
+		
+	}
+	
+	public static Boolean isElementAvailable(WebDriver driver,String elementIdentity,String locator)
+	{
+		Boolean flag=false;
+		try
+		{
+			WebElement element=ElementByLocator(driver, elementIdentity, locator);
+			if(element.isDisplayed())
+			{
+				flag=true;
+				
+			}
+			else 				
+				{
+					flag=false;
+					
+				}
+			
+			return flag;
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+			
+		}
+		
+		
+	
+	}
+	
+	public static void ClickThroughJavaScript(WebDriver driver,String elementIdentity,String locator)
+	{
+		try
+		{
+			 WebElement element=ElementByLocator(driver, elementIdentity, locator);
+			 JavascriptExecutor executor = (JavascriptExecutor)driver;
+			 executor.executeScript("arguments[0].click();", element);
+			
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+			
+		}
+		
+		
+		
+	}
+	
+    public static int GetElementsCount(WebDriver driver,String elementIdentity,String locator)
+	{
+		int count=0;
+		try
+		{
+			String ElementLocator=elementIdentity.toLowerCase();
+		
+			 switch (ElementLocator) {
+				case "id":
+					count=driver.findElements(By.id(locator)).size();
+					break;
+					
+				case "xpath":
+					count=driver.findElements(By.xpath(locator)).size();
+		            break;
+		            
+				default:
+					count=0;
+					break;
+			 }
+			 
+			 return count;
+			
+		}
+		catch(Exception ex)
+		{
+			throw ex;
+			
+		}
+		
+		
+		
+	}
+	
+	
 
 }

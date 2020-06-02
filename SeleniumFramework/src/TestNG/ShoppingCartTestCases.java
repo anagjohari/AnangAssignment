@@ -9,12 +9,14 @@ import POM.*;
 
 public class ShoppingCartTestCases {
 	
-	final WebDriver driver=Driver.GetDriver();
+	WebDriver driver;
   @Test
   public void EmptyCart() {
 	  
 	  try
 	  {
+	  Driver objDriver=new Driver("chrome");
+	  driver=objDriver.GetDriver();
 	  ShoppingCartPage page=HomePage.CheckShoppingCart(driver);
 	  String message=page.VerifyEmptyCart(driver);
 	  Assert.assertEquals(message,"Your cart is empty!");
@@ -25,7 +27,7 @@ public class ShoppingCartTestCases {
 	  }
 	  finally
 	  {
-		  driver.close();
+		 driver.close();
 		  
 	  }
 	  

@@ -17,10 +17,8 @@ public class LoginPage {
 		{   UserDetails details=new UserDetails();
 		    details=details.GetUserDetails();
 			Helper.NavigateURL(driver, url);
-			Helper.Wait(2000);
 			Helper.InputText(driver,"xpath",ElementsLoc.txtUserName,details.userName);
 			Helper.InputText(driver,"xpath",ElementsLoc.txtPassword,details.password);
-			Helper.Wait(2000);
 			Helper.Click(driver, "xpath",ElementsLoc.btnLogin);
 			return true;		
 		}

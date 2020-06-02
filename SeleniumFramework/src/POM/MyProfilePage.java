@@ -15,18 +15,19 @@ public class MyProfilePage {
 		String profileName="NoMessage";
 		try
 		{
-	     UserDetails details=new UserDetails();
-	     details=details.GetUserDetails();
+	    UserDetails details=new UserDetails();
+	    details=details.GetUserDetails();
 		Helper.Click(driver, "xpath",ElementsLoc.lnkEdit);
-		Helper.Wait(2000);
 		Helper.ClearText(driver, "xpath",ElementsLoc.txtUserFirstName);
 		Helper.InputText(driver, "xpath", ElementsLoc.txtUserFirstName,details.firstName);
 		Helper.ClearText(driver, "xpath",ElementsLoc.txtUserLastName);
 		Helper.InputText(driver, "xpath", ElementsLoc.txtUserLastName,details.lastName);
-		Helper.Wait(2000);
-		Helper.Click(driver, "xpath",ElementsLoc.btnSaveProfile);
-		Helper.Wait(2000);
-		profileName=Helper.GetText(driver,"xpath",ElementsLoc.lnkDisplayUser);
+		Helper.Click(driver, "xpath", ElementsLoc.btnSaveProfile);
+		if(Helper.isElementAvailable(driver, "xpath", ElementsLoc.successSaveProfile))
+		{
+		profileName=Helper.GetText(driver,"xpath",ElementsLoc.profileFullName);
+		}	
+		
 		return profileName;
 		}
 		catch(Exception ex)

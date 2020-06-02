@@ -5,14 +5,25 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 public class Driver {
 	
-	public static WebDriver GetDriver()
-	{
+	static WebDriver driver;
 	
+	public  Driver(String browserName) 
+	{
 		try
 		{
-			  System.setProperty("webdriver.chrome.driver", "C:\\chromedriver\\chromedriver.exe");
-			  WebDriver driver=new ChromeDriver();
-			  return driver;
+			String _browserName=browserName.toLowerCase();
+			   switch (_browserName) {
+				case "chrome":
+				System.setProperty("webdriver.chrome.driver", "C:\\chromedriver\\chromedriver.exe");
+				 driver=new ChromeDriver();	
+				break;
+							            
+				default:
+					break;
+				}
+				   
+			 
+			 	 
 			
 		}
 		catch(Exception ex)
@@ -20,9 +31,20 @@ public class Driver {
 			throw ex;
 			
 		}
-		
-		
-	
+
 	}
+	
+	public WebDriver GetDriver()
+	{
+		
+		return driver;
+		
+		
+	}
+
+	
+
+
+
 
 }

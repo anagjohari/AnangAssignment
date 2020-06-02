@@ -12,13 +12,15 @@ public class ShoppingCartPage {
 		String cartMessage="NoMessage";
 		try
 		{
-		Helper.Wait(2000);
+		if(Helper.FinishLoading(driver))
+		{
 		cartMessage=Helper.GetText(driver,"xpath",ElementsLoc.msgMyCart);
+		}
 		return cartMessage;
+		
 		}
 		catch(Exception ex)
 		{
-		 
 			return cartMessage;
 			
 		}
